@@ -19,7 +19,6 @@ function onYouTubeIframeAPIReady() {
   });
 }
 function onPlayerReady(event) {
-  console.log(player.getVideoUrl());
   socket = io();
   socket.on('paused', function() {
     broadcast = false; 
@@ -41,15 +40,14 @@ function onPlayerReady(event) {
   socket.on('load', function(url) {
     broadcast = false;
     console.log(url);
-    player.loadVideoById(url);
+    player.loadVideoById(youtube_parser(url));
     broadcast = true;
   });
-  console.log('ready');
   $('.idSubmit').click(function() {
     var url = $('#vidId').val();
     broadcast = false;
     console.log(url);
-    player.loadVideoById(url);
+    player.loadVideoById(youtube_parser(url));
     socket.emit('load', url);
     broadcast = true;
   });
@@ -86,6 +84,33 @@ function changeURL() {
   player.loadVideoById(url);
 }
 
+/**
+* Get YouTube ID from various YouTube URL
+* @author: takien
+* @url: http://takien.com
+* For PHP YouTube parser, go here http://takien.com/864
+*/
+
+
+function youtube_parser(url){
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    return (match&&match[7].length==11)? match[7] : false;
+}
+
+
+function YouTubeGetID(url){
+  var ID = '';
+  url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+  if(url[2] !== undefined) {
+    ID = url[2].split(/[^0-9a-z_\-]/i);
+    ID = ID[0];
+  }
+  else {
+    ID = url;
+  }
+    return ID;
+}
 
 
 /*function noBroadcast(fn) {

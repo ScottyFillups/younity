@@ -20,6 +20,7 @@ io.on('connection', function(socket) {
     socket.broadcast.emit('paused');
   });
   socket.on('load', function(url) {
+    console.log(url);
     socket.broadcast.emit('load', url);
   });
 });
