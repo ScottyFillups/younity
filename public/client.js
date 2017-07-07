@@ -11,7 +11,7 @@ function onYouTubeIframeAPIReady() {
   player = new YT.Player('ytVid', {
     height: '530',
     width: '942',
-    videoId: 'M7lc1UVf-VE',
+    videoId: 'cMg8KaMdDYo',
     events: {
       'onReady': onPlayerReady,
       'onStateChange': onPlayerStateChange
@@ -51,6 +51,7 @@ function onPlayerReady(event) {
     socket.emit('load', url);
     broadcast = true;
   });
+  $('.idSubmit').prop('disabled', false);
 }
 
 function onPlayerStateChange(event) {

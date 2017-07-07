@@ -1,4 +1,58 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 html, body {
   margin: 0;
   padding: 0;
+}
+html {
+  margin-top: 5px;
+  font-size: 120%;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  text-align: center;
+}
+.red {
+  color: #ffa500;
+}
+#nity {
+  background-color: #ffa500;
+  box-shadow: 6px 6px 0 #f49242;
+  color: white;
+  padding: 6px;
+  margin: 5px 12px 5px 2px;
+}
+.tiny {
+  font-size: 50%;
+}
+button {
+  font-size: 1em;
+  background-color: #444;
+  color: white;
+  cursor: pointer;
+  padding: 5px;
+  text-transform: uppercase;
+  border: none;
+  margin: 10px 0 20px 0;
+}
+input[type="text"] {
+  font-size: 0.8em;
+  border: none;
+  border-bottom: 1px solid #444;
+  background-color: #eee;
+  padding: 5px;
+}
+.creator {
+  margin-top: 50px;
+  font-size: 0.6em;
+  padding: 10px 10px 10px 50px;
+  width: 400px;
+  background-color: #999;
+  color: white;
+  display: inline-block;
+  position: absolute;
+  top: -35px;
+  left: -50px;
+  text-align: left;
+  transform: rotate(-20deg);
+  text-transform: uppercase;
+}
 }

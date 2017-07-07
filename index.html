@@ -8,16 +8,19 @@
     <script src="client.js"></script>
   </head>
   <body>
-    <h1>Sync'd YouTube player!</h1>
+    <h1>
+      Yo<span class="red">u</span><span id="nity">Nity</span><span class="tiny">js</span>
+    </h1>
     <p>
-      Enter a URL, and watch Youtube videos in real-time
-      with your friends!
+      Enter a URL, and watch YouTube videos in real-time
+      with your friends! Also, no ads ;)))
     </p>
     <!-- don't use form, it will refresh page and ruin it -->
     <div>
-      <input id="vidId" autocomplete="off"/ >
-      <button class="idSubmit">Load video</button>
+      <input id="vidId" type="text" size="100" autocomplete="off" placeholder="YouTube URL" /><br>
+      <button class="idSubmit" disabled>Load video</button>
     </div>
     <div id='ytVid'></div>
+    <div class="creator">Created by ScottyFillups | Philip Scott</div>
   </body>
 </html>
