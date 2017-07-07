@@ -1,0 +1,4 @@
+Events:
+- Pause / Play
+- Load
+- Change time
