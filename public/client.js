@@ -19,6 +19,7 @@ function onYouTubeIframeAPIReady() {
   });
 }
 function onPlayerReady(event) {
+  console.log(player.getVideoUrl());
   socket = io();
   socket.on('paused', function() {
     broadcast = false; 
@@ -37,10 +38,26 @@ function onPlayerReady(event) {
     player.playVideo();
     broadcast = true;
   });
+  socket.on('load', function(url) {
+    broadcast = false;
+    console.log(url);
+    player.loadVideoById(url);
+    broadcast = true;
+  });
+  console.log('ready');
+  $('.idSubmit').click(function() {
+    var url = $('#vidId').val();
+    broadcast = false;
+    console.log(url);
+    player.loadVideoById(url);
+    socket.emit('load', url);
+    broadcast = true;
+  });
 }
 
 function onPlayerStateChange(event) {
   if (broadcast) {
+    console.log('broadcasting');
     switch(event.data) {
       case YT.PlayerState.UNSTARTED:
         socket.emit('unstarted');
@@ -68,6 +85,9 @@ function changeURL() {
   var url = document.getElementById('url').value;
   player.loadVideoById(url);
 }
+
+
+
 /*function noBroadcast(fn) {
   broadcast = false;
   fn();

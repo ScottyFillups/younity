@@ -19,6 +19,9 @@ io.on('connection', function(socket) {
   socket.on('paused', function() {
     socket.broadcast.emit('paused');
   });
+  socket.on('load', function(url) {
+    socket.broadcast.emit('load', url);
+  });
 });
 
 var port = process.env.PORT || 8080;
