@@ -1,7 +1,9 @@
 var express = require('express');
 var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var http = require('http');
+var server = http.createServer(app);
+var io = require('socket.io')(server);
+var active = false;
 
 app.use(express.static('public'));
 
@@ -11,6 +13,7 @@ app.get('/', function(req, res) {
 
 io.on('connection', function(socket) {
   socket.on('buffering', function(time) {
+    active = true;
     socket.broadcast.emit('buffering', time);
   });
   socket.on('playing', function() {
@@ -20,13 +23,19 @@ io.on('connection', function(socket) {
     socket.broadcast.emit('paused');
   });
   socket.on('load', function(url) {
-    console.log(url);
     socket.broadcast.emit('load', url);
   });
 });
 
+setInterval(function() {
+  if (active) {
+    http.get('http://younityjs.herokuapp.com');
+    active = false;
+  }
+}, 1000 * 60 * 29);
+
 var port = process.env.PORT || 8080;
-http.listen(port, function() {
+server.listen(port, function() {
   console.log('listening on port ' + port);
 });
 
