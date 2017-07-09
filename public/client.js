@@ -18,45 +18,48 @@ function onYouTubeIframeAPIReady() {
     }
   });
 }
+function noBroadcast(player, methodName, args) {
+  broadcast = false;
+  console.log('broadcast off');
+  if (args !== undefined) {
+    player[methodName].apply(player, args);
+  } else {
+    player[methodName]();
+  }
+  // add a delay to let function call before broadcast is set to true
+  setTimeout(function() {
+    console.log('broadcasting back on');
+    broadcast = true;
+  }, 500);
+}
 function onPlayerReady(event) {
   socket = io();
   socket.on('paused', function() {
-    broadcast = false; 
-    player.pauseVideo();
-    broadcast = true;
+    noBroadcast(player, 'pauseVideo');
   });
   socket.on('playing', function() {
-    broadcast = false;
-    player.playVideo();
-    broadcast = true;
+    noBroadcast(player, 'playVideo');
   });
-  //i'll tweak it later
   socket.on('buffering', function(time) {
-    broadcast = false;
-    player.seekTo(time, true);
-    player.playVideo();
-    broadcast = true;
+    if (time === undefined || time === null) {
+      time = 0;
+    }
+    noBroadcast(player, 'seekTo', [time, true]);
   });
   socket.on('load', function(url) {
-    broadcast = false;
-    console.log(url);
-    player.loadVideoById(youtube_parser(url));
-    broadcast = true;
+    noBroadcast(player, 'cueVideoById', [youtube_parser(url)]);
   });
   $('.idSubmit').click(function() {
     var url = $('#vidId').val();
-    broadcast = false;
-    console.log(url);
-    player.loadVideoById(youtube_parser(url));
+    noBroadcast(player, 'cueVideoById', [youtube_parser(url)]);
     socket.emit('load', url);
-    broadcast = true;
   });
   $('.idSubmit').prop('disabled', false);
 }
 
 function onPlayerStateChange(event) {
   if (broadcast) {
-    console.log('broadcasting');
+    console.log('broadcasting: ' + event.data);
     switch(event.data) {
       case YT.PlayerState.UNSTARTED:
         socket.emit('unstarted');
@@ -66,9 +69,6 @@ function onPlayerStateChange(event) {
         break;
       case YT.PlayerState.PLAYING:
         socket.emit('playing');
-        break;
-      case YT.PlayerState.PAUSED:
-        socket.emit('paused');
         break;
       case YT.PlayerState.BUFFERING:
         socket.emit('buffering', player.getCurrentTime());
@@ -86,7 +86,6 @@ function onPlayerStateChange(event) {
 * @url: http://takien.com
 * For PHP YouTube parser, go here http://takien.com/864
 */
-
 
 function youtube_parser(url){
     var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
