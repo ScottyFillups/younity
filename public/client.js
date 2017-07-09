@@ -80,11 +80,6 @@ function onPlayerStateChange(event) {
   }
 }
 
-function changeURL() {
-  var url = document.getElementById('url').value;
-  player.loadVideoById(url);
-}
-
 /**
 * Get YouTube ID from various YouTube URL
 * @author: takien
@@ -98,25 +93,3 @@ function youtube_parser(url){
     var match = url.match(regExp);
     return (match&&match[7].length==11)? match[7] : false;
 }
-
-
-function YouTubeGetID(url){
-  var ID = '';
-  url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-  if(url[2] !== undefined) {
-    ID = url[2].split(/[^0-9a-z_\-]/i);
-    ID = ID[0];
-  }
-  else {
-    ID = url;
-  }
-    return ID;
-}
-
-
-/*function noBroadcast(fn) {
-  broadcast = false;
-  fn();
-  broadcast = true;
-}*/
-
